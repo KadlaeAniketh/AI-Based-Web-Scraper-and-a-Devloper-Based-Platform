@@ -1,13 +1,19 @@
 #!/bin/bash
 set -euo pipefail
 
-# Install system dependencies for Chromium
+# Install system dependencies
 sudo apt-get update
-sudo apt-get install -y chromium-browser chromium-chromedriver
+sudo apt-get install -y \
+    libfreetype6 \
+    libharfbuzz0b \
+    libjpeg62-turbo \
+    libopenjp2-7 \
+    libpng16-16 \
+    libtiff5 \
+    libxcb1 \
+    libxext6 \
+    libxrender1
 
-# Set up Python environment
-python -m pip install --upgrade pip
+# Install Python dependencies
+pip install --upgrade pip
 pip install -r requirements.txt
-
-# Fix any potential ChromaDB issues
-pip install --force-reinstall -U numpy
