@@ -11,7 +11,8 @@ langchain-groq==0.1.2
 chromadb==0.4.24
 PyPDF2==3.0.1
 pdfplumber==0.11.0
-pymupdf==1.23.26  # Replaces fitz
 python-dotenv==1.0.1
 numpy==1.26.4
 tqdm==4.66.2
+pymupdf==1.23.8  # Last version known to work without compilation
+pdf2image==1.16.3  
