@@ -1,20 +1,32 @@
+# Core libraries
 streamlit
 beautifulsoup4
 selenium
 requests
-langchain
+tqdm
+numpy
+dotenv  # Consider using python-dotenv instead
+
+# LangChain ecosystem
+langchain>=0.1.14
 langchain-community
 langchain-core
 langchain-huggingface
 langchain-chroma
 langchain-groq
-chromadb
 langchain-ollama
+
+# ChromaDB
+chromadb>=0.4.24
+
+# PDF handling
 PyPDF2
 pdfplumber
-fitz
-dotenv
-numpy
-tqdm
-protobuf==3.20.*
+PyMuPDF  # This provides 'fitz', required for advanced PDF support
+langchain-text-splitters
+langchain-embeddings-openai  # Optional if using OpenAI embeddings
 
+# Compatibility fix
+protobuf==3.20.*
+opentelemetry-sdk
+opentelemetry-exporter-otlp-proto-grpc
