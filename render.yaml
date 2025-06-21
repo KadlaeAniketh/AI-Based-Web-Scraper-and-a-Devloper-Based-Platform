@@ -2,10 +2,9 @@ services:
   - type: web
     name: streamlit-app
     runtime: python
+    pythonVersion: "3.11.6"  # Explicitly set compatible version
     buildCommand: "./build.sh"
     startCommand: "streamlit run webScaper.py --server.port=$PORT --server.address=0.0.0.0"
     envVars:
       - key: PORT
         value: "8000"
-      - key: PYTHON_VERSION
-        value: "3.11.6"  # Match your local Python version
