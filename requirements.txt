@@ -9,6 +9,7 @@ langchain-huggingface
 langchain-chroma
 langchain-groq
 chromadb
+langchain-ollama
 PyPDF2
 pdfplumber
 fitz
