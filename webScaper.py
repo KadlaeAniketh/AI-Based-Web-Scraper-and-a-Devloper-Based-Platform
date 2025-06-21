@@ -88,7 +88,10 @@ elif choice == "Upload PDF":
             splits = splitter.split_documents(docs)
 
             vectorstore = Chroma.from_documents(
-                documents=splits, embedding=embeddings, persist_directory="./chroma_db"
+                documents=splits,
+                embedding=embeddings,
+                persist_directory="./chroma_db",
+                collection_name="pdf_docs"  # ✅ Added collection name
             )
             retriever = vectorstore.as_retriever()
 
@@ -122,9 +125,12 @@ elif choice == "Upload PDF":
 
             user_q = st.text_input("Ask a question:")
             if user_q:
-                response = rag.invoke(
-                    {"input": user_q},
-                    config={"configurable": {"session_id": session_id}}
-                )
-                st.success("Answer:")
-                st.write(response["answer"])
+                try:
+                    response = rag.invoke(
+                        {"input": user_q},
+                        config={"configurable": {"session_id": session_id}}
+                    )
+                    st.success("Answer:")
+                    st.write(response["answer"])
+                except Exception as e:
+                    st.error(f"❌ Error: {str(e)}")
