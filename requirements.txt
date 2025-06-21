@@ -16,3 +16,5 @@ fitz
 dotenv
 numpy
 tqdm
+protobuf==3.20.*
+
