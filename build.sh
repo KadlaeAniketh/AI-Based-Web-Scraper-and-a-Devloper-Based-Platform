@@ -12,8 +12,9 @@ sudo apt-get install -y \
     libtiff5 \
     libxcb1 \
     libxext6 \
-    libxrender1
+    libxrender1 \
+    poppler-utils  # Required for pdf2image
 
 # Install Python dependencies
-pip install --upgrade pip
+python -m pip install --upgrade pip
 pip install -r requirements.txt
