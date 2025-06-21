@@ -5,15 +5,13 @@ requests==2.31.0
 langchain==0.1.16
 langchain-community==0.0.34
 langchain-core==0.1.41
-# Replace langchain-huggingface with huggingface-hub
 huggingface-hub==0.22.2
-langchain-chroma==0.0.5
+langchain-chroma==0.2.4  # Updated to latest compatible version
 langchain-groq==0.1.2
 chromadb==0.4.24
 PyPDF2==3.0.1
 pdfplumber==0.11.0
-# Replace fitz with pymupdf
-pymupdf==1.23.26
+pymupdf==1.23.26  # Replaces fitz
 python-dotenv==1.0.1
 numpy==1.26.4
 tqdm==4.66.2
