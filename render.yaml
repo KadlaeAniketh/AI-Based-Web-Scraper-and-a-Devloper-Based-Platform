@@ -2,7 +2,7 @@ services:
   - type: web
     name: streamlit-app
     runtime: python
-    pythonVersion: "3.11.6"  # Explicitly set compatible version
+    pythonVersion: "3.11.6"  # PyMuPDF works best with 3.11
     buildCommand: "./build.sh"
     startCommand: "streamlit run webScaper.py --server.port=$PORT --server.address=0.0.0.0"
     envVars:
