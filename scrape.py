@@ -54,30 +54,36 @@
 #         dom_content[i : i + max_length] for i in range(0, len(dom_content), max_length)
 #     ]
 
-
+import time
 import selenium.webdriver as webdriver
 from selenium.webdriver.chrome.service import Service
 from bs4 import BeautifulSoup
-import time
 
+# Pinecone & LangChain
+import pinecone
+from langchain.embeddings.openai import OpenAIEmbeddings
+from langchain.vectorstores import Pinecone
+from langchain.schema import Document
+import os
+
+# ----------- Web Scraping -----------
 def scrape_website(website):
-    print("lunching chrome browser...")
+    print("Launching Chrome browser...")
 
-    chrome_driver_path="./chromedriver.exe"
-    options=webdriver.ChromeOptions()
-    driver=webdriver.Chrome(service=Service(chrome_driver_path), options=options)
+    chrome_driver_path = "./chromedriver.exe"  # Use chromedriver path suitable for your system
+    options = webdriver.ChromeOptions()
+    driver = webdriver.Chrome(service=Service(chrome_driver_path), options=options)
 
     try:
         driver.get(website)
-        print("page loaded..")
-        html=driver.page_source
+        print("Page loaded...")
         time.sleep(10)
-
+        html = driver.page_source
         return html
     finally:
         driver.quit()
 
-
+# ----------- Extract & Clean -----------
 def extract_body_content(html_content):
     soup = BeautifulSoup(html_content, "html.parser")
     body_content = soup.body
@@ -85,23 +91,41 @@ def extract_body_content(html_content):
         return str(body_content)
     return ""
 
-
 def clean_body_content(body_content):
     soup = BeautifulSoup(body_content, "html.parser")
-
     for script_or_style in soup(["script", "style"]):
         script_or_style.extract()
 
-    # Get text or further process the content
     cleaned_content = soup.get_text(separator="\n")
     cleaned_content = "\n".join(
         line.strip() for line in cleaned_content.splitlines() if line.strip()
     )
-
     return cleaned_content
 
-
 def split_dom_content(dom_content, max_length=6000):
-    return [
-        dom_content[i : i + max_length] for i in range(0, len(dom_content), max_length)
-    ]
+    return [dom_content[i: i + max_length] for i in range(0, len(dom_content), max_length)]
+
+# ----------- Pinecone Integration -----------
+def init_pinecone():
+    pinecone.init(
+        api_key=os.getenv("PINECONE_API_KEY"),     # Set in your environment
+        environment=os.getenv("PINECONE_ENV")      # e.g., "gcp-starter"
+    )
+
+def index_to_pinecone(chunks, index_name="web-scrape-index"):
+    embeddings = OpenAIEmbeddings(openai_api_key=os.getenv("OPENAI_API_KEY"))
+    documents = [Document(page_content=chunk) for chunk in chunks]
+    vectorstore = Pinecone.from_documents(documents, embedding=embeddings, index_name=index_name)
+    print("✅ Successfully stored in Pinecone.")
+
+# ----------- Main Flow -----------
+if __name__ == "__main__":
+    website_url = "https://example.com"  # Replace with your target URL
+    html = scrape_website(website_url)
+
+    body = extract_body_content(html)
+    cleaned = clean_body_content(body)
+    chunks = split_dom_content(cleaned)
+
+    init_pinecone()
+    index_to_pinecone(chunks)
